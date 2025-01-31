@@ -2,23 +2,20 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-@st.cache
+# Use @st.cache_data instead of the deprecated @st.cache
+@st.cache_data
 def load_data():
-    return pd.read_csv('all_data.csv')
+    return pd.read_csv('dashboard/all_data.csv')
 
 df = load_data()
 
-
 st.sidebar.title('E-commerce Dashboard Settings')
 
- 
 show_data_preview = st.sidebar.checkbox('Show Data Preview', value=True)
 show_summary_stats = st.sidebar.checkbox('Show Summary Statistics', value=True)
 
- 
 cities = df['customer_city'].unique()
 selected_city = st.sidebar.selectbox('Select Customer City', cities)
-
 
 st.title('E-commerce Dashboard')
 
@@ -46,7 +43,6 @@ fig3 = px.bar(payment_type_count, x=payment_type_count.index, y=payment_type_cou
               title="Payment Type Distribution", labels={'y': 'Count', 'x': 'Payment Type'})
 st.plotly_chart(fig3)
 
- 
 filtered_df = df[df['customer_city'] == selected_city]
 st.write(f"Showing data for customers from {selected_city}:")
 st.write(filtered_df.head())
